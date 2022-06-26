@@ -24,6 +24,10 @@
                     <td><label for="name">Name:</label></td>
                     <td><input type="text" id="name" name="name"></td>
                 </tr>
+                <tr>
+                    <td><label for="ing">Zutat:</label></td>
+                    <td><input type="text" id="ing" name="ing"></td>
+                </tr>
             </table>
             <button type="submit">Suche</button>
         </form>
