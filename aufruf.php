@@ -25,6 +25,10 @@
                     <td><label for="name">Name:</label></td>
                     <td><input type="text" id="name" name="name"></td>
                 </tr>
+                <tr>
+                    <td><label for="ing">Zutat:</label></td>
+                    <td><input type="text" id="ing" name="ing"></td>
+                </tr>
             </table>
             <button type="submit">Suche</button>
         </form>
@@ -72,23 +76,69 @@
                 ?>
                     <div>
                         <h2><?= $row['name'] ?></h2>
-                        <p>
+                        <table>
+                            <tr>
+                                <th>Zutat</th>
+                                <th>Menge</th>
+                                <th></th>
+                            </tr>
                             <?php
                             $ingredient = preg_split('/;/', $row['ing']);
                             foreach ($ingredient as $value) {
-                                echo "$value <br>";
+                                $ing = preg_split('/ /', $value);
+                                echo "<tr>";
+                                foreach ($ing as $element) {
+                                    echo "<td>$element</td>";
+                                }
+                                echo "</tr>";
                             }
                             ?>
-                        </p>
-                        <p>
-                        <h3><?= $row['prep'] ?></h3>
-                        </p>
+                            </p>
+                            <p>
+                            <h3><?= $row['prep'] ?></h3>
+                            </p>
                     </div>
                     <hr>
             <?php
                 }
             }
-        } else {
+        } elseif ($_REQUEST["ing"]) {
+            $sql = "SELECT * FROM recipes;";
+            $result = $conn->query($sql);
+            while($row = $result->fetch_assoc()) {
+                if(str_contains($row["ing"], $_REQUEST["ing"])){
+                    ?>
+                    <div>
+                        <h2><?= $row['name'] ?></h2>
+                        <table>
+                            <tr>
+                                <th>Zutat</th>
+                                <th>Menge</th>
+                                <th></th>
+                            </tr>
+                            <?php
+                            $ingredient = preg_split('/;/', $row['ing']);
+                            foreach ($ingredient as $value) {
+                                $ing = preg_split('/ /', $value);
+                                echo "<tr>";
+                                foreach ($ing as $element) {
+                                    echo "<td>$element</td>";
+                                }
+                                echo "</tr>";
+                            }
+                            ?>
+                            </p>
+                            <p>
+                            <h3><?= $row['prep'] ?></h3>
+                            </p>
+                    </div>
+                    <hr>
+            <?php
+                }
+            }
+        } 
+        
+        else {
             ?>
             <div>
                 <h2>Bitte ein Rezept wählen</h2>
