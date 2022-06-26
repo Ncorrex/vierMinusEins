@@ -4,13 +4,22 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="aufruf.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: black;
+            text-decoration: none;
+        }
+    </style>
 </head>
 
 <body>
 
     <div class="sidenav">
         <a href="index.php">Start</a>
-        <a href="addRecipe.php">Hinzufügen</a>
+        <a href="addRecipe.php?repName=&prep=&ings=">Hinzufügen</a>
     </div>
 
     <div class="main">
@@ -18,133 +27,27 @@
         <form method="post" action="./aufruf.php">
             <table>
                 <tr>
-                    <td><label for="id">ID:</label></td>
-                    <td><input type="number" id="id" name="id"> </td>
-                </tr>
-                <tr>
-                    <td><label for="name">Name:</label></td>
-                    <td><input type="text" id="name" name="name"></td>
-                </tr>
-                <tr>
-                    <td><label for="ing">Zutat:</label></td>
-                    <td><input type="text" id="ing" name="ing"></td>
+                    <td><label for="search">Suche:</label></td>
+                    <td><input type="text" id="search" name="search"> </td>
                 </tr>
             </table>
-            <button type="submit">Suche</button>
+            <button type="submit"><span class="material-symbols-outlined">search</span></button>
         </form>
+
         <?php
         include 'makeConn.php';
-        if ($_REQUEST["id"]) {
+        if ($_REQUEST["search"]) {
             $sql = "SELECT * FROM recipes;";
             $result = $conn->query($sql);
             while ($row = $result->fetch_assoc()) {
-                if ($row["id"] == $_REQUEST["id"]) {
-        ?>
-                    <div>
-                        <h2><?= $row['name'] ?></h2>
-                        <table>
-                            <tr>
-                                <th>Zutat</th>
-                                <th>Menge</th>
-                                <th></th>
-                            </tr>
-                            <?php
-                            $ingredient = preg_split('/;/', $row['ing']);
-                            foreach ($ingredient as $value) {
-                                $ing = preg_split('/ /', $value);
-                                echo "<tr>";
-                                foreach ($ing as $element) {
-                                    echo "<td>$element</td>";
-                                }
-                                echo "</tr>";
-                            }
-                            ?>
-                            </p>
-                            <p>
-                            <h3><?= $row['prep'] ?></h3>
-                            </p>
-                    </div>
-                    <hr>
-                <?php
+                if ($row["id"] == $_REQUEST["search"] || str_contains($row["name"], $_REQUEST["search"]) || str_contains($row["ing"], $_REQUEST["search"])) {
+                    $tempId = $row['id'];
+                    $tempName = $row['name'];
+                    echo "<h4><a class='recipeList' href='./showRecipe.php?id=$tempId'>$tempName</a></h4>";
                 }
             }
-        } elseif ($_REQUEST["name"]) {
-            $sql = "SELECT * FROM recipes;";
-            $result = $conn->query($sql);
-            while ($row = $result->fetch_assoc()) {
-                if ($row["name"] == $_REQUEST["name"]) {
-                ?>
-                    <div>
-                        <h2><?= $row['name'] ?></h2>
-                        <table>
-                            <tr>
-                                <th>Zutat</th>
-                                <th>Menge</th>
-                                <th></th>
-                            </tr>
-                            <?php
-                            $ingredient = preg_split('/;/', $row['ing']);
-                            foreach ($ingredient as $value) {
-                                $ing = preg_split('/ /', $value);
-                                echo "<tr>";
-                                foreach ($ing as $element) {
-                                    echo "<td>$element</td>";
-                                }
-                                echo "</tr>";
-                            }
-                            ?>
-                            </p>
-                            <p>
-                            <h3><?= $row['prep'] ?></h3>
-                            </p>
-                    </div>
-                    <hr>
-            <?php
-                }
-            }
-        } elseif ($_REQUEST["ing"]) {
-            $sql = "SELECT * FROM recipes;";
-            $result = $conn->query($sql);
-            while($row = $result->fetch_assoc()) {
-                if(str_contains($row["ing"], $_REQUEST["ing"])){
-                    ?>
-                    <div>
-                        <h2><?= $row['name'] ?></h2>
-                        <table>
-                            <tr>
-                                <th>Zutat</th>
-                                <th>Menge</th>
-                                <th></th>
-                            </tr>
-                            <?php
-                            $ingredient = preg_split('/;/', $row['ing']);
-                            foreach ($ingredient as $value) {
-                                $ing = preg_split('/ /', $value);
-                                echo "<tr>";
-                                foreach ($ing as $element) {
-                                    echo "<td>$element</td>";
-                                }
-                                echo "</tr>";
-                            }
-                            ?>
-                            </p>
-                            <p>
-                            <h3><?= $row['prep'] ?></h3>
-                            </p>
-                    </div>
-                    <hr>
-            <?php
-                }
-            }
-        } 
-        
-        else {
-            ?>
-            <div>
-                <h2>Bitte ein Rezept wählen</h2>
-            </div>
-        <?php
         }
+
         ?>
     </div>
 </body>

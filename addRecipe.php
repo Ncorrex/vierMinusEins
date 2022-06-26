@@ -4,12 +4,18 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="addRecipe.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
 </head>
 
 <body>
     <div class="sidenav">
         <a href="index.php">Start</a>
-        <a href="addRecipe.php">Hinzufügen</a>
+        <a href="addRecipe.php?repName=&prep=&ings=">Hinzufügen</a>
     </div>
 
     <div class="main">
@@ -22,7 +28,7 @@
                     <td><input type="text" name="repName" id="repName"></td>
                 </tr>
                 <tr>
-                    <td><label for="ings">Rezepte</label></td>
+                    <td><label for="ings">Zutaten</label></td>
                     <td><input type="text" name="ings" id="ings" title="bitte durch ; trennen"></td>
                 </tr>
                 <tr>
